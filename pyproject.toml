@@ -1,0 +1,43 @@
+[project]
+name = "aoc-2024"
+version = "0.1.0"
+description = "Solutions for Advent of Code 2024"
+readme = "README.md"
+authors = [
+    { name = "Emanuel Ferm", email = "emanuel@eferm.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "requests>=2.32.3",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "ipykernel>=6.29.5",
+    "mypy>=1.13.0",
+    "ruff>=0.8.1",
+    "types-requests>=2.32.0.20241016",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+
+[tool.ruff]
+namespace-packages = ["src"]
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = ["D", "T20"]
+
+[tool.ruff.lint.isort]
+lines-after-imports = 2
+
+[tool.mypy]
+strict = true
+
+[tool.pyright]
+typeCheckingMode = "strict"
