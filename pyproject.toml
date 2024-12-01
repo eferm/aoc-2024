@@ -3,13 +3,12 @@ name = "aoc-2024"
 version = "0.1.0"
 description = "Solutions for Advent of Code 2024"
 readme = "README.md"
-authors = [
-    { name = "Emanuel Ferm", email = "emanuel@eferm.com" }
-]
+authors = [{ name = "Emanuel Ferm", email = "emanuel@eferm.com" }]
 requires-python = ">=3.12"
-dependencies = [
-    "requests>=2.32.3",
-]
+dependencies = ["requests>=2.32.3"]
+
+[project.scripts]
+bootstrap = "src.cli:bootstrap"
 
 [build-system]
 requires = ["hatchling"]
@@ -38,6 +37,9 @@ lines-after-imports = 2
 
 [tool.mypy]
 strict = true
+namespace_packages = true
+explicit_package_bases = true
+mypy_path = "$MYPY_CONFIG_FILE_DIR"
 
 [tool.pyright]
 typeCheckingMode = "strict"
