@@ -10,5 +10,8 @@ wheels/
 .venv/
 
 .mypy_cache/
+.ruff_cache/
 .vscode/
 .env
+/data/
+*.bak.py
