@@ -1,23 +1,21 @@
-import pathlib
-from collections import Counter
-
-from src.utils import lmap, lzip
-
-
-with pathlib.Path("src/day01/input.txt").open() as f:
+with open("src/day01/input.txt") as f:
     lines = f.read().splitlines()
 
 
-left = [int(left) for left, _ in [line.split() for line in lines]]
-right = [int(right) for _, right in [line.split() for line in lines]]
+def split(line: str) -> tuple[int, int]:
+    a, b = line.split(maxsplit=1)
+    return int(a), int(b)
+
+
+splits = map(split, lines)
+left, right = map(sorted, zip(*splits, strict=True))
 
 # Part 1
 
-dists = lmap(lambda t: abs(t[0] - t[1]), lzip(sorted(left), sorted(right)))
-print("Part 1:", sum(dists))
+distances = map(lambda a, b: abs(a - b), left, right)
+print("Part 1:", sum(distances))
 
 # Part 2
 
-counts = Counter(right)
-similarity = lmap(lambda val: val * counts.get(val, 0), left)
-print("Part 2:", sum(similarity))
+similarities = (l * right.count(l) for l in left)
+print("Part 2:", sum(similarities))
