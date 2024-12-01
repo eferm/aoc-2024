@@ -1,5 +1,17 @@
-with open("src/day01/input.txt") as f:
-    lines = f.read().splitlines()
+from src.utils import get_input
+
+
+inp = """\
+3   4
+4   3
+2   5
+1   3
+3   9
+3   3
+"""
+inp = get_input(2024, 1)
+
+lines = inp.splitlines()
 
 
 def split(line: str) -> tuple[int, int]:
