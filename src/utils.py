@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-import argparse
 import os
+from argparse import ArgumentParser
 from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
@@ -11,9 +11,12 @@ import requests
 
 YEAR = 2024
 
-INPUT_URL = "https://adventofcode.com/{year}/day/{day}/input"
+INP_URL = "https://adventofcode.com/{year}/day/{day}/input"
 
-BOILERPLATE = '''\
+INP_FILENAME = "data/input_{year}-12-{day:02}.txt"
+SRC_FILENAME = "src/year_{year}/day_{day:02}.py"
+
+SRC_TEMPLATE = '''\
 from src.utils import get_input
 
 
@@ -29,12 +32,8 @@ print(*lines[:10], sep="\\n")
 '''
 
 
-src_file = "src/year_{year}/day_{day:02}.py"
-inp_file = "data/input_{year}-12-{day:02}.txt"
-
-
 def get_input(day: int, year: int) -> str:
-    target = Path(inp_file.format(year=year, day=day))
+    target = Path(INP_FILENAME.format(year=year, day=day))
     if not target.exists():
         contents = fetch_input(day, year)
         target.write_text(contents)
@@ -48,7 +47,7 @@ def fetch_input(day: int, year: int) -> str:
 
     print(f"Fetching input for {year=} {day=} from server...")
     resp = requests.get(
-        INPUT_URL.format(year=year, day=day),
+        INP_URL.format(year=year, day=day),
         headers={"Cookie": f"session={os.environ['SESSION']}"},
         timeout=10,
     )
@@ -57,17 +56,17 @@ def fetch_input(day: int, year: int) -> str:
 
 
 def cli() -> None:
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = ArgumentParser(description=__doc__)
     parser.add_argument("day", type=int)
     parser.add_argument("-y", "--year", type=int, default=YEAR)
 
     args = parser.parse_args()
 
-    target = Path(src_file.format(**vars(args)))
+    target = Path(SRC_FILENAME.format(**vars(args)))
     if not target.exists():
         print(f"Seeding file {target}...")
         target.parent.mkdir(exist_ok=True)
-        target.write_text(BOILERPLATE.format(**vars(args)))
+        target.write_text(SRC_TEMPLATE.format(**vars(args)))
 
     get_input(**vars(args))
 

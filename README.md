@@ -2,12 +2,13 @@
 
 Copy session cookie from browser to `.env` as `SESSION`.
 
-Load the env vars with one of:
+To load env vars into the environment, do one of the following:
 
 - Configure VSCode with:
   ```json
   "python.experiments.optInto": ["pythonTerminalEnvVarActivation"]
   ```
+
 - Run scripts with:
   ```shell
   uv run --env-file .env path/to/script.py

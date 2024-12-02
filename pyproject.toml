@@ -15,17 +15,13 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [dependency-groups]
-dev = [
-    "ipykernel>=6.29.5",
-    "mypy>=1.13.0",
-    "ruff>=0.8.1",
-    "types-requests>=2.32.0.20241016",
-]
+dev = ["mypy>=1.13.0", "ruff>=0.8.1", "types-requests>=2.32.0.20241016"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src"]
 
 [tool.ruff]
+line-length = 79
 namespace-packages = ["src"]
 
 [tool.ruff.lint]
