@@ -13,7 +13,7 @@ YEAR = 2024
 
 INP_URL = "https://adventofcode.com/{year}/day/{day}/input"
 
-INP_FILENAME = "data/input_{year}-12-{day:02}.txt"
+INP_FILENAME = "data/input_{year}-{day:02}.txt"
 SRC_FILENAME = "src/year_{year}/day_{day:02}.py"
 
 SRC_TEMPLATE = '''\
@@ -42,7 +42,7 @@ def get_input(day: int, year: int) -> str:
 
 def fetch_input(day: int, year: int) -> str:
     if not is_past_midnight(day):
-        msg = "It's not midnight yet."
+        msg = f"It's not {year}-12-{day:02} in New York yet."
         raise ValueError(msg)
 
     print(f"Fetching input for {year=} {day=} from server...")

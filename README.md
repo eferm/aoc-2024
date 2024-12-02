@@ -18,6 +18,12 @@ To load env vars into the environment, do one of the following:
   env $(cat .env | xargs) python path/to/script.py
   ```
 
+Alternatively, manually download input files and save them to
+
+```shell
+data/input_{year}-{day:02}.txt
+```
+
 ## Run
 
 Download and bootstrap new day's puzzle:
