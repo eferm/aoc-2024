@@ -9,7 +9,7 @@ inp = """\
 3   9
 3   3
 """
-inp = get_input(2024, 1)
+inp = get_input(1, 2024)
 
 lines = inp.splitlines()
 
