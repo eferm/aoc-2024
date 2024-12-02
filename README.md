@@ -47,3 +47,13 @@ Or in VSCode:
 ```
 > Python: Run Python File
 ```
+
+## Notes
+
+### 2024
+
+#### Day 1
+
+Very easy. Had some fun setting up a fresh repo. Rewrote the solution a few times, experimenting with _not_ jumping to complex functional style solutions (`map`, `reduce`, etc), specifically forcing myself to write more loops.
+
+Reflecting on last year, I got massively stuck on day 12. Not wanting to "cheat," nor jump ahead to day 13 onwards, I abandoned AoC entirely for the year. That seems suboptimal, so this year I'll allow myself to skip past days I'm stuck on once a new day unlocks.
