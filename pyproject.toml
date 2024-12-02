@@ -26,7 +26,7 @@ namespace-packages = ["src"]
 
 [tool.ruff.lint]
 select = ["ALL"]
-ignore = ["D", "T20", "PTH123", "E741"]
+ignore = ["D", "T20", "PTH123", "E741", "PLR2004", "ANN202"]
 
 [tool.ruff.lint.isort]
 lines-after-imports = 2
@@ -36,6 +36,8 @@ strict = true
 namespace_packages = true
 explicit_package_bases = true
 mypy_path = "$MYPY_CONFIG_FILE_DIR"
+disallow_incomplete_defs = false
+disallow_untyped_defs = false
 
 [tool.pyright]
 typeCheckingMode = "strict"

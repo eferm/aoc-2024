@@ -2,8 +2,10 @@ from __future__ import annotations
 
 import os
 from argparse import ArgumentParser
+from collections.abc import Iterable
 from datetime import datetime
 from pathlib import Path
+from typing import Any
 from zoneinfo import ZoneInfo
 
 import requests
@@ -17,7 +19,7 @@ INP_FILENAME = "data/input_{year}-{day:02}.txt"
 SRC_FILENAME = "src/year_{year}/day_{day:02}.py"
 
 SRC_TEMPLATE = '''\
-from src.utils import get_input
+from src.utils import get_input, preview
 
 
 inp = """\\
@@ -28,7 +30,7 @@ ex ample
 inp = get_input({day}, {year})
 
 lines = inp.splitlines()
-print(*lines[:10], sep="\\n")
+preview(lines)
 '''
 
 
@@ -75,6 +77,24 @@ def is_past_midnight(day: int, month: int = 12, year: int = YEAR) -> bool:
     """True if it's year-month-day, or later, in Eastern Time."""
     tz = ZoneInfo("America/New_York")
     return datetime.now(tz) >= datetime(year, month, day, tzinfo=tz)
+
+
+def preview(obj1: object, obj2: object | None = None, n: int = 6) -> None:
+    prefix: str = obj1 if isinstance(obj1, str) and obj2 is not None else ""
+    obj: object = obj2 if obj2 is not None else obj1
+
+    lines: list[str]
+    match obj:
+        case str():
+            lines = obj.splitlines()
+        case Iterable():
+            it: Iterable[Any] = obj
+            lines = list(map(str, it))
+        case _:
+            lines = [str(obj)]
+
+    print(prefix, end=" " if prefix else "")
+    print(*lines[:n], sep="\n")
 
 
 if __name__ == "__main__":
