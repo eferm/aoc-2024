@@ -95,6 +95,7 @@ def preview(obj1: object, obj2: object | None = None, n: int = 6) -> None:
 
     print(prefix, end=" " if prefix else "")
     print(*lines[:n], sep="\n")
+    print()
 
 
 if __name__ == "__main__":

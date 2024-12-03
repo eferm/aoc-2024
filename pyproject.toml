@@ -26,7 +26,7 @@ namespace-packages = ["src"]
 
 [tool.ruff.lint]
 select = ["ALL"]
-ignore = ["D", "T20", "PTH123", "E741", "PLR2004", "ANN202"]
+ignore = ["D", "T20", "PTH123", "E741", "PLR2004", "ANN202", "C417"]
 
 [tool.ruff.lint.isort]
 lines-after-imports = 2
@@ -41,3 +41,4 @@ disallow_untyped_defs = false
 
 [tool.pyright]
 typeCheckingMode = "strict"
+reportArgumentType = false
