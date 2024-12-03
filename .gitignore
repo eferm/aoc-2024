@@ -13,5 +13,7 @@ wheels/
 .ruff_cache/
 .vscode/
 .env
+.python-version
+uv.lock
 /data/
 *bak.py
