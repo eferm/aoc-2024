@@ -30,18 +30,16 @@ print("Part 2:", total)
 # Alternative for using reduce()
 # Explored passing "state" in the sign of the accumulated value
 
-
-def parse(total: int, instr: tuple[str, str, str]) -> int:
-    match instr:
-        case ("do", *_):
-            return abs(total)
-        case ("don't", *_):
-            return -abs(total)  # Use sign to store state
-        case ("mul", a, b):
-            return total + int(a) * int(b) if total > 0 else total
-        case _:
-            raise ValueError(instr)
-
+# def parse(total: int, instr: tuple[str, str, str]) -> int:
+#     match instr:
+#         case ("do", *_):
+#             return abs(total)
+#         case ("don't", *_):
+#             return -abs(total)  # Use sign to store state
+#         case ("mul", a, b):
+#             return total + int(a) * int(b) if total > 0 else total
+#         case _:
+#             raise ValueError(instr)
 
 # from functools import reduce
 # prod = reduce(parse, tape, 1) - 1  # Offset to allow flipping sign
