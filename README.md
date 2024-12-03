@@ -1,3 +1,20 @@
+## Rules
+
+Some rules I follow for myself, optimizing for fun and learning:
+
+- Standard Python code only, no third-party libraries*
+  - I use `requests` for downloading puzzle inputs, but this is basically a first-party library anyway.
+- In general I can use Google or LLM for _generic_ programming questions:
+  - Look up docs, syntax, etc.
+  - Things I should know but always forget, e.g.:
+    - "How to reverse a linked list in Python"
+    - "How to breadth first search in Python"
+  - I never Google for anything AoC or programming competition related while solving.
+- After solving and pushing a dirty but working solution I might revisit and clean things up. This includes _edits_ based on aspects of someone else's solution I liked, but entire refactors would only be of my own design.
+- (New for 2024) If I'm stuck on day X's problem, I'm allowed to skip ahead to day X+1 once that's released.
+  - I can be severely nerd-sniped by unsolved problems and I'm unsure how to move past this; this remains an unsolved problem.
+
+
 ## Setup
 
 Copy session cookie from browser to `.env` as `SESSION`.
