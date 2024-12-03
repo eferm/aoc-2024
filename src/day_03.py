@@ -42,22 +42,20 @@ print("Part 2:", total)
 # Alternative for using reduce() with state in the accumulator arg
 
 
-def parse(
-    accum: tuple[bool, int],
-    instr: tuple[str, str, str],
-) -> tuple[bool, int]:
-    flag, total = accum
+def parse(total: int, instr: tuple[str, str, str]) -> int:
     match instr:
         case ("do", *_):
-            return (True, total)
+            return abs(total)
         case ("don't", *_):
-            return (False, total)
+            return -abs(total)  # Use sign to store state
         case ("mul", a, b):
-            total += flag * int(a) * int(b)
-            return (flag, total)
+            if total >= 0:
+                total += int(a) * int(b)
+            return total
         case _:
             raise ValueError(instr)
 
 
 # from functools import reduce
-# print("Part 2:", reduce(parse, tape, (True, 0))[1])
+# prod = reduce(parse, tape, 1) - 1  # Offset to allow flipping sign
+# print("Part 2:", prod)
