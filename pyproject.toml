@@ -26,7 +26,7 @@ namespace-packages = ["src"]
 
 [tool.ruff.lint]
 select = ["ALL"]
-ignore = ["D", "T20", "PTH123", "E741", "PLR2004", "ANN202", "C417"]
+ignore = ["D", "T20", "PTH123", "E741", "PLR2004", "ANN202", "C417", "ERA001"]
 
 [tool.ruff.lint.isort]
 lines-after-imports = 2

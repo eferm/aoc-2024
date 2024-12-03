@@ -37,3 +37,27 @@ for instr in tape:
             raise ValueError(instr)
 
 print("Part 2:", total)
+
+
+# Alternative for using reduce() with state in the accumulator arg
+
+
+def parse(
+    accum: tuple[bool, int],
+    instr: tuple[str, str, str],
+) -> tuple[bool, int]:
+    flag, total = accum
+    match instr:
+        case ("do", *_):
+            return (True, total)
+        case ("don't", *_):
+            return (False, total)
+        case ("mul", a, b):
+            total += flag * int(a) * int(b)
+            return (flag, total)
+        case _:
+            raise ValueError(instr)
+
+
+# from functools import reduce
+# print("Part 2:", reduce(parse, tape, (True, 0))[1])
