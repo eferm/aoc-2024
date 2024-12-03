@@ -16,7 +16,7 @@ YEAR = 2024
 INP_URL = "https://adventofcode.com/{year}/day/{day}/input"
 
 INP_FILENAME = "data/input_{year}-{day:02}.txt"
-SRC_FILENAME = "src/year_{year}/day_{day:02}.py"
+SRC_FILENAME = "src/day_{day:02}.py"
 
 SRC_TEMPLATE = '''\
 from src.utils import get_input, preview
