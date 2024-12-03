@@ -91,6 +91,9 @@ def preview(obj1: object, obj2: object | None = None, n: int = 6) -> None:
     match obj:
         case str():
             lines = obj.splitlines()
+        case dict():
+            d: dict[Any, Any] = obj
+            lines = [f"{key}: {val}" for key, val in d.items()]
         case Iterable():
             it: Iterable[Any] = obj
             lines = list(map(str, it))
