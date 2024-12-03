@@ -76,9 +76,9 @@ Very easy. Had some fun setting up a fresh repo. Rewrote the solution a few time
 One thing I learned was passing multiple iterables to `map`. E.g. these are equivalent:
 
 ```python
->>> map(lambda odd, even: odd + even, [1, 3], [2, 4])
->>> map(lambda t: t[0] + t[1], zip([1, 3], [2, 4]))
->>> map(lambda t: t[0] + t[1], [(1, 2), (3, 4)])
+map(lambda odd, even: odd + even, [1, 3], [2, 4])
+map(lambda t: t[0] + t[1], zip([1, 3], [2, 4]))
+map(lambda t: t[0] + t[1], [(1, 2), (3, 4)])
 ```
 
 Useful since Python 3 doesn't do tuple unpacking in lambdas.
@@ -103,13 +103,33 @@ Easy. One realization was that you can use `map` with list slices to implement `
 
 Easy. Part 1 being an obvious regex problem, my immediate thought was whether part 2 would contain a gotcha in which regexes would turn out to _not_ work. Heh.
 
-Some mini learnings: you can transpose a matrix (list of lists) with `*zip(*matrix)` when using `map`. So say you have a list of tuples (in today's puzzle this was (a, b) extracted from each `mul(a,b)`), and you want each tuple to be the input to some function `f(a, b)`.
+I experimented a bit with what it would look like to replace the part 2 instruction-eval loop with a function. It's not a straightforward `map` or `reduce` since each iteration depends on state (`do()` / `don't()`) set by previous instructions. However, state being so minimal (a boolean) I figured `reduce` might work anyway, and we can use the sign of the accumulated value as a flag:
+
+```python
+from functools import reduce
+
+def parse(total: int, instr: tuple[str, str, str]) -> int:
+    match instr:
+        case ("do", *_):
+            return abs(total)
+        case ("don't", *_):
+            return -abs(total)  # Store state in sign
+        case ("mul", a, b):
+            return total + int(a) * int(b) if total > 0 else total
+        case _:
+            raise ValueError(instr)
+
+print(reduce(parse, tape, 1) - 1)  # Initial 1 to allow flipping sign
+```
+
+While this works I'm not sure it's preferred in any way over a simple loop! For a similar but less hacky approach can also make the accumulator value a tuple of `(flag, total)`, with initial value `(True, 0)`.
+
+Further mini learning: you can transpose a matrix (list of lists) with `list(zip(*matrix))`. So say you have a list of tuples (in today's puzzle this was (a, b) extracted from each `mul(a,b)`), and you want each tuple to be the input to some function `f(a, b)`:
 
 ```python
 >>> ts = [(1, 2), (3, 4), (5, 6), (7, 8)]
 
->>> from operator import mul
->>> list(map(mul, *zip(*ts)))  # This is pretty nice!
+>>> list(map(lambda a, b: a * b, *zip(*ts)))  # This is pretty nice!
 [2, 12, 30, 56]
 
 >>> list(map(lambda t: t[0] * t[1], ts))  # Eww no tuple unpacking
@@ -119,8 +139,6 @@ Some mini learnings: you can transpose a matrix (list of lists) with `*zip(*matr
 Inspecting various ways of passing arguments to a lambda in `map`:
 
 ```python
->>> ts = [(1, 2), (3, 4), (5, 6), (7, 8)]
-
 # 1 param, each a 2-tuple -> 4 items
 >>> list(map(lambda t2: t2, ts))
 [(1, 2), (3, 4), (5, 6), (7, 8)]
@@ -136,12 +154,4 @@ Inspecting various ways of passing arguments to a lambda in `map`:
 # 4 params, each an int -> 2 items
 >>> list(map(lambda a, b, c, d: (a, b, c, d), *ts))
 [(1, 3, 5, 7), (2, 4, 6, 8)]
-
-# 1 param, each a 1-tuple (of a 2-tuple) -> 4 items
->>> list(map(lambda t1: t1, zip(ts)))
-[((1, 2),), ((3, 4),), ((5, 6),), ((7, 8),)]
-
-# 4 params, each a 2-tuple -> 1 item
->>> list(map(lambda a2, b2, c2, d2: (a2, b2, c2, d2), *zip(ts)))
-[((1, 2), (3, 4), (5, 6), (7, 8))]
 ```
