@@ -1,14 +1,18 @@
 from __future__ import annotations
 
+import argparse
 import os
-from argparse import ArgumentParser
 from collections.abc import Iterable
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING
 from zoneinfo import ZoneInfo
 
 import requests
+
+
+if TYPE_CHECKING:
+    from typing import Any
 
 
 YEAR = 2024
@@ -58,7 +62,7 @@ def fetch_input(day: int, year: int) -> str:
 
 
 def cli() -> None:
-    parser = ArgumentParser(description=__doc__)
+    parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("day", type=int)
     parser.add_argument("-y", "--year", type=int, default=YEAR)
 

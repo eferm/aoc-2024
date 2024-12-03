@@ -11,16 +11,16 @@ xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))
 """  # Part 2
 inp = get_input(3, 2024)
 
+tape = re.findall(r"(do|don't|mul)\((?:(\d{1,3}),(\d{1,3}))?\)", inp)
+
+
 # Part 1
 
-strings = re.findall(r"mul\((\d{1,3}),(\d{1,3})\)", inp)
+prods = [int(a) * int(b) for op, a, b in tape if op == "mul"]
+print("Part 1:", sum(prods))
 
-muls = map(lambda a, b: int(a) * int(b), *zip(*strings, strict=True))
-print("Part 1:", sum(muls))
 
 # Part 2
-
-tape = re.findall(r"(do|don't|mul)\((?:(\d{1,3}),(\d{1,3}))?\)", inp)
 
 flag = 1
 total = 0
