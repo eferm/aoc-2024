@@ -2,12 +2,7 @@
 
 Copy session cookie from browser to `.env` as `SESSION`.
 
-To load env vars into the environment, do one of the following:
-
-- Configure VSCode with:
-  ```json
-  "python.experiments.optInto": ["pythonTerminalEnvVarActivation"]
-  ```
+To run things with env vars loaded:
 
 - Run scripts with:
   ```shell
@@ -16,6 +11,11 @@ To load env vars into the environment, do one of the following:
 
   ```shell
   env $(cat .env | xargs) python path/to/script.py
+  ```
+
+- Or, configure VSCode terminal with:
+  ```json
+  "python.experiments.optInto": ["pythonTerminalEnvVarActivation"]
   ```
 
 Alternatively, manually download input files and save them to
@@ -29,11 +29,11 @@ data/input_{year}-{day:02}.txt
 Download and bootstrap new day's puzzle:
 
 ```shell
-uv run src/utils.py 1
+bootstrap 1
 ```
 
 ```shell
-bootstrap 1
+uv run src/utils.py 1
 ```
 
 Run a puzzle script:
@@ -58,7 +58,7 @@ Very easy. Had some fun setting up a fresh repo. Rewrote the solution a few time
 
 One thing I learned was passing multiple iterables to `map`. E.g. these are equivalent:
 
-```python-console
+```python
 >>> map(lambda odd, even: odd + even, [1, 3], [2, 4])
 >>> map(lambda t: t[0] + t[1], zip([1, 3], [2, 4]))
 >>> map(lambda t: t[0] + t[1], [(1, 2), (3, 4)])
@@ -72,11 +72,59 @@ Reflecting on last year, I got massively stuck on day 12. Not wanting to "cheat,
 
 Easy. One realization was that you can use `map` with list slices to implement `itertools.pairwise`. So:
 
-```python-console
+```python
 >>> seq = [1, 2, 3, 4, 5]
 >>> list(map(lambda a, b: (a, b), seq[:-1], seq[1:]))
 [(1, 2), (2, 3), (3, 4), (4, 5)]
+
 >>> from itertools import pairwise
 >>> list(pairwise([1, 2, 3, 4, 5]))
 [(1, 2), (2, 3), (3, 4), (4, 5)]
+```
+
+#### Day 3
+
+Easy. Part 1 being an obvious regex problem, my immediate thought was whether part 2 would contain a gotcha in which regexes would turn out to _not_ work. Heh.
+
+Some mini learnings: you can transpose a matrix (list of lists) with `*zip(*matrix)` when using `map`. So say you have a list of tuples (in today's puzzle this was (a, b) extracted from each `mul(a,b)`), and you want each tuple to be the input to some function `f(a, b)`.
+
+```python
+>>> ts = [(1, 2), (3, 4), (5, 6), (7, 8)]
+
+>>> from operator import mul
+>>> list(map(mul, *zip(*ts)))  # This is pretty nice!
+[2, 12, 30, 56]
+
+>>> list(map(lambda t: t[0] * t[1], ts))  # Eww no tuple unpacking
+[2, 12, 30, 56]
+```
+
+Inspecting various ways of passing arguments to a lambda in `map`:
+
+```python
+>>> ts = [(1, 2), (3, 4), (5, 6), (7, 8)]
+
+# 1 param, each a 2-tuple -> 4 items
+>>> list(map(lambda t2: t2, ts))
+[(1, 2), (3, 4), (5, 6), (7, 8)]
+
+# 2 params, each an int -> 4 items
+>>> list(map(lambda a, b: (a, b), *zip(*ts)))
+[(1, 2), (3, 4), (5, 6), (7, 8)]
+
+# 1 param, each a 4-tuple -> 2 items
+>>> list(map(lambda t4: t4, zip(*ts)))
+[(1, 3, 5, 7), (2, 4, 6, 8)]
+
+# 4 params, each an int -> 2 items
+>>> list(map(lambda a, b, c, d: (a, b, c, d), *ts))
+[(1, 3, 5, 7), (2, 4, 6, 8)]
+
+# 1 param, each a 1-tuple (of a 2-tuple) -> 4 items
+>>> list(map(lambda t1: t1, zip(ts)))
+[((1, 2),), ((3, 4),), ((5, 6),), ((7, 8),)]
+
+# 4 params, each a 2-tuple -> 1 item
+>>> list(map(lambda a2, b2, c2, d2: (a2, b2, c2, d2), *zip(ts)))
+[((1, 2), (3, 4), (5, 6), (7, 8))]
 ```
