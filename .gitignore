@@ -17,4 +17,5 @@ wheels/
 uv.lock
 /data/
 *bak.py
+scratch.py
 .DS_Store
