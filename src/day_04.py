@@ -1,97 +1,62 @@
 from collections import Counter
-from collections.abc import Callable, Generator
+from collections.abc import Generator
+from functools import partial
 from itertools import product
 
-from src.utils import get_input, preview
+from src.utils import get_input
 
 
-inp = """\
-MMMSXXMASM
-MSAMXMSMSA
-AMXSXMAAMM
-MSAMASMSMX
-XMASAMXAMM
-XXAMMXXAMA
-SMSMSASXSS
-SAXAMASAAA
-MAMMMXMMMM
-MXMXAXMASX
-"""  # Example
 inp = get_input(4, 2024)
-
 lines = inp.splitlines()
-# preview(lines, n=10)
 
 R = len(lines)
 C = len(lines[0])
-# print(R, C)
+
+type coord = tuple[int, int]
+type vector = list[coord]
 
 
-def contained(v: list[tuple[int, int]]) -> bool:
-    return all(0 <= r < R and 0 <= c < C for r, c in v)
+def vectors(length: int, mask: list[int], origin: coord) -> Generator[vector]:
+    row, col = origin
+    for rm, cm in product(mask, repeat=2):  # (0,0), (0,1), (1,0), (1,1), ...
+        v = [(row + step * rm, col + step * cm) for step in range(length)]
+        if all(0 <= r < R and 0 <= c < C for r, c in v):  # Contained in box
+            yield v
 
 
-def candidates(row: int, col: int) -> list[list[tuple[int, int]]]:
-    possible = [
-        # Horizontal
-        [(row, col + d) for d in range(4)],
-        [(row, col - d) for d in range(4)],
-        # Vertical
-        [(row + d, col) for d in range(4)],
-        [(row - d, col) for d in range(4)],
-        # Diagonal
-        [(row + d, col + d) for d in range(4)],
-        [(row + d, col - d) for d in range(4)],
-        [(row - d, col + d) for d in range(4)],
-        [(row - d, col - d) for d in range(4)],
-    ]
-
-    return [v for v in possible if contained(v)]
+def coords(char: str) -> Generator[coord]:
+    for row, col in product(range(R), range(C)):
+        if lines[row][col] == char:
+            yield row, col
 
 
-def translate(l: list[tuple[int, int]]) -> str:
-    return "".join([lines[r][c] for r, c in l])
+def string(v: vector) -> str:
+    return "".join([lines[r][c] for r, c in v])
 
 
+vectors1 = partial(vectors, 4, [-1, 0, 1])  # Diag, vert, hori
 total = 0
 
-for row in range(R):
-    for col in range(C):
-        if lines[row][col] == "X":
-            for v in candidates(row, col):
-                if translate(v) == "XMAS":
-                    total += 1
+for row, col in coords("X"):
+    for v in vectors1((row, col)):
+        total += string(v) == "XMAS"
 
 print("Part 1:", total)
 
 
-def candidates2(row: int, col: int) -> list[list[tuple[int, int]]]:
-    possible = [
-        # Diagonal
-        [(row + d, col + d) for d in range(3)],
-        [(row + d, col - d) for d in range(3)],
-        [(row - d, col + d) for d in range(3)],
-        [(row - d, col - d) for d in range(3)],
-    ]
-
-    return [v for v in possible if contained(v)]
-
-
-def bbox(v: list[tuple[int, int]]) -> tuple[tuple[int, int], tuple[int, int]]:
+def bbox(v: vector) -> tuple[coord, coord]:  # (min coord, max coord)
     rs = [r for r, _ in v]
     cs = [c for _, c in v]
     return (min(rs), min(cs)), (max(rs), max(cs))
 
 
-boxes: list[tuple[tuple[int, int], tuple[int, int]]] = []
+vectors2 = partial(vectors, 3, [-1, 1])  # Diag
+boxes: Counter[tuple[coord, coord]] = Counter()
 
-for row in range(R):
-    for col in range(C):
-        if lines[row][col] == "M":
-            for v in candidates2(row, col):
-                if translate(v) == "MAS":
-                    boxes.append(bbox(v))
-                    # print(translate(v), v, bbox(v))
+for row, col in coords("M"):
+    for v in vectors2((row, col)):
+        if string(v) == "MAS":
+            boxes[bbox(v)] += 1
 
 
-print("Part 2:", len([k for k, v in Counter(boxes).items() if v == 2]))
+print("Part 2:", len([k for k, count in boxes.items() if count == 2]))

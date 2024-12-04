@@ -83,7 +83,7 @@ def is_past_midnight(day: int, month: int = 12, year: int = YEAR) -> bool:
     return datetime.now(tz) >= datetime(year, month, day, tzinfo=tz)
 
 
-def preview(obj1: object, obj2: object | None = None, n: int = 6) -> None:
+def preview(obj1: object, obj2: object | None = None, n: int = 10) -> None:
     prefix: str = obj1 if isinstance(obj1, str) and obj2 is not None else ""
     obj: object = obj2 if obj2 is not None else obj1
 
